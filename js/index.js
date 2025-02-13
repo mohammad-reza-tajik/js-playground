@@ -1,6 +1,9 @@
 const notificationBtn = document.querySelector('#notification-btn');
 const alertParagraph = document.querySelector('p');
+alertParagraph.innerHTML = document.visibilityState;
+alertParagraph.innerHTML += "     " + ("Notification" in window)
 let registration;
+
 
 
 if (typeof navigator.serviceWorker !== "undefined") {
@@ -17,14 +20,16 @@ if (typeof navigator.serviceWorker !== "undefined") {
 
 notificationBtn.addEventListener("click", async () => {
     const permission = await Notification.requestPermission();
+
     if (permission === "granted") {
+        alertParagraph.innerHTML += "    granted";
         registration.active.postMessage({
             type: "notification"
         });
         try {
             new Notification("from inside");
         } catch (err) {
-            alertParagraph.innerHTML = err.message;
+            alertParagraph.innerHTML += "    " + err.message;
             console.log(err)
         }
 
