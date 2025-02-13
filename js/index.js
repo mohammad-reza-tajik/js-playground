@@ -5,6 +5,8 @@ let registration;
 if (typeof navigator.serviceWorker !== "undefined") {
     registration = await navigator.serviceWorker.register("./js/sw.js");
 
+    await registration.showNotification("from outside")
+
     navigator.serviceWorker.addEventListener("message", (event) => {
         if (event.data === "activated") {
             window.location.reload();
