@@ -1,8 +1,22 @@
 const notificationBtn = document.querySelector('#notification-btn');
+let registration;
+
+
+if (typeof navigator.serviceWorker !== "undefined") {
+    registration = await navigator.serviceWorker.register("./js/sw.js");
+
+    navigator.serviceWorker.addEventListener("message", (event) => {
+        if (event.data === "activated") {
+            window.location.reload();
+        }
+    });
+}
 
 notificationBtn.addEventListener("click",async ()=>{
     const permission = await Notification.requestPermission();
     if(permission === "granted"){
-        new Notification("Hello World");
+        registration.active.postMessage({
+            type: "notification"
+        });
     }
 })
